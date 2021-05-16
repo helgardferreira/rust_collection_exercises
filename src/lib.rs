@@ -50,3 +50,80 @@ pub mod basic_calculations {
         mode
     }
 }
+
+pub mod pig_latin {
+    pub fn cleaner_pig_latin(input: &str) -> String {
+        let mut chars = input.chars().peekable();
+        let mut new_s = String::new();
+        while let Some(c) = chars.next() {
+            let suffix = match c {
+                'a' | 'e' | 'i' | 'o' | 'u' => {
+                    new_s.push(c);
+                    String::from("-hay")
+                }
+                'a'..='z' | 'A'..='Z' => {
+                    format!("-{}ay", c)
+                }
+                _ => {
+                    new_s.push(c);
+                    continue;
+                }
+            };
+
+            while let Some(&c) = chars.peek() {
+                match c {
+                    'a'..='z' | 'A'..='Z' => {
+                        chars.next();
+                        new_s.push(c);
+                    }
+                    _ => break,
+                }
+            }
+
+            new_s += &suffix;
+        }
+
+        new_s
+    }
+
+    pub fn crappy_pig_latin(text: &str) -> String {
+        let mut pig_latin = String::new();
+
+        for word in text.split_whitespace() {
+            let mut new_word = String::new();
+            let mut suffix = String::new();
+            let chars_len = word.char_indices().count();
+            let chars = word.char_indices();
+            for (i, char) in chars {
+                if i == 0 {
+                    match char {
+                        'a' | 'e' | 'i' | 'o' | 'u' => {
+                            suffix.push_str("-hay");
+                        }
+                        _ => {
+                            suffix = format!("-{}ay", char);
+                            continue;
+                        }
+                    }
+                }
+
+                match char {
+                    'a'..='z' | 'A'..='Z' => {
+                        new_word.push(char);
+                    }
+                    _ => {
+                        if chars_len - 1 == i {
+                            suffix.push(char);
+                        } else {
+                            new_word.push(char);
+                        }
+                    }
+                }
+            }
+
+            pig_latin += &(new_word + &suffix + " ");
+        }
+
+        pig_latin
+    }
+}
