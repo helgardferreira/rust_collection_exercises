@@ -52,6 +52,7 @@ pub mod basic_calculations {
 }
 
 pub mod pig_latin {
+    // Credit for this approach goes to: https://codereview.stackexchange.com/a/172910
     pub fn cleaner_pig_latin(input: &str) -> String {
         let mut chars = input.chars().peekable();
         let mut new_s = String::new();
